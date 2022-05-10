@@ -229,13 +229,18 @@
                         <li class="icons dropdown d-none d-md-flex">
                             <a href="#" class="log-user">
                                 <span>{{ Auth::user()->name }} | {{ Auth::user()->email }}</span>
-
                             </a>
                         </li>
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
+                                @if (Auth::user()->photo)
+                                <img src="{{asset('photo/user_photo')}}/{{Auth::user()->photo}}" height="40" width="40"
+                                    alt="">
+                                @else
                                 <img src="{{ asset('dashboard/images/user/1.png') }}" height="40" width="40" alt="">
+                                @endif
+
                             </div>
                             <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                                 <div class="dropdown-content-body">
@@ -243,7 +248,8 @@
 
 
                                         <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i>
+                                            <a href="{{ route('user_profile', ['id'=>Auth::user()->id])}}"><i
+                                                    class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
                                         {{-- <li>
@@ -300,6 +306,82 @@
                                 Dashboard
                             </span>
                         </a>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span class="nav-text">Settings
+                            </span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li>
+                                <a href="{{ route('user.index') }}">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                    Users
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('role.index')}}">
+                                    <i class="fa fa-key" aria-hidden="true"></i>
+                                    Role
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('address.index')}}">
+                                    <i class="fa fa-address-book" aria-hidden="true"></i>
+                                    Address
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('price.index')}}">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                    Price
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-industry" aria-hidden="true"></i>
+                            <span class="nav-text">Manage Branch
+                            </span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li>
+                                <a href="{{ route('branch.index')}}">
+                                    <i class="fa fa-university" aria-hidden="true"></i>
+                                    <span class="nav-text">Branch
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('branch_setup')}}">
+                                    <i class="fa fa-wrench" aria-hidden="true"></i>
+                                    Branch User Setup
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-truck" aria-hidden="true"></i>
+                            <span class="nav-text">Manage Shipment
+                            </span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li>
+                                <a href="{{ route('courier.index') }}">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    Shipment
+                                </a>
+                            </li>
+                            {{-- <li>
+                                <a href="{{ route('role.index')}}">
+                                    <i class="fa fa-key" aria-hidden="true"></i>
+                                    Role
+                                </a>
+                            </li> --}}
+                        </ul>
                     </li>
                 </ul>
             </div>

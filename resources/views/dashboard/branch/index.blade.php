@@ -1,7 +1,7 @@
 @extends('dashboard_layout')
 
 @section('title')
-Menu
+Branch
 @endsection
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@ Menu
     <div class="col p-md-0">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Menu</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Branch</a></li>
         </ol>
     </div>
 </div>
@@ -24,12 +24,12 @@ Menu
                     <div class="card-title">
                         <div class="row">
                             <div class="col-6">
-                                <h4>Menus</h4>
+                                <h4>Branch</h4>
                             </div>
                             <div class="col-6 text-right">
-                                <a href="{{ route('menu.create')}}" class="btn btn-outline-primary ">
+                                <a href="{{ route('branch.create')}}" class="btn btn-outline-primary ">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
-                                    Add new Menu
+                                    Add new Branch
                                 </a>
                             </div>
                         </div>
@@ -39,10 +39,9 @@ Menu
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Menu</th>
-                                    <th>Route</th>
-                                    <th>Parent</th>
-                                    <th>Icon</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
                                     <th>Status</th>
                                     <th>Last Update</th>
                                     <th>Edit</th>
@@ -50,21 +49,14 @@ Menu
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($menus as $index=>$item)
+                                @foreach ($branches as $index=>$item)
                                 <tr>
                                     <th>{{ $index + 1 }}</th>
-                                    <td>{{ $item['title'] }}</td>
-                                    <td>{{ $item['route_name'] }}</td>
+                                    <td>{{ $item['name'] }}</td>
+                                    <td>{{ $item['phone']}}</td>
                                     <td>
-                                        @if ($item['parent_id'] == 0)
-                                        Parent
-                                        @else
-                                        {{ $item['title'] }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (!empty($item['icon']))
-                                        <i class="fa {{ $item['icon'] }}" aria-hidden="true"></i>
+                                        @if (!empty($item['addresses']['address']))
+                                        {{ $item['addresses']['address']}}
                                         @else
                                         N/A
                                         @endif
@@ -77,17 +69,20 @@ Menu
                                         @endif
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($item['updated_at'])->diffForhumans() }}
+                                        {{\Carbon\Carbon::parse($item['updated_at'])->format('d-m-Y H:i:s A') }}
+                                        {{--
+                                        {{\Carbon\Carbon::createFromTimeStamp(strtotime($item['updated_at']))->diffForHumans()}}
+                                        --}}
 
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('menu.edit', $item['id'])}}" class="btn btn-outline-info">
+                                        <a href="{{ route('branch.edit', $item['id'])}}" class="btn btn-outline-info">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <form action="{{ route('menu.destroy', $item['id']) }}" method="post">
+                                        <form action="{{ route('branch.destroy', $item['id']) }}" method="post">
                                             @method('DELETE')
                                             @csrf
 

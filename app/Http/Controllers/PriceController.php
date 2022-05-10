@@ -2,27 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Price;
 
-class DashboardController extends Controller
+class PriceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $viewPath = 'dashboard.';
-
-    
-    public function dashboard()
-    {
-        return view($this->viewPath.'dashboard');
-    }
-
+    protected $viewPath = 'dashboard.settings.price.';
     public function index()
     {
-        //
+        $prices = Price::get()->toArray();
+        return view($this->viewPath.'index', compact('prices'));
     }
 
     /**
@@ -32,7 +26,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->viewPath.'add');
     }
 
     /**
@@ -43,7 +37,12 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'price' => 'required',
+            'type' => 'required|unique:price,type',
+        ]);
+        Price::create($validatedData);
+        return redirect()->route('price.index')->with('status', 'Saved Successfully');
     }
 
     /**
@@ -65,7 +64,8 @@ class DashboardController extends Controller
      */
     public function edit($id)
     {
-        //
+        $price = Price::find($id)->toArray();
+        return view($this->viewPath.'edit', compact('price'));
     }
 
     /**
@@ -77,7 +77,12 @@ class DashboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'price' => 'required',
+            'type' => 'required|unique:price,type',
+        ]);
+        Price::where('id', '=', $id)->update($validatedData);
+        return redirect()->route('price.index')->with('status', 'Updated Successfully');
     }
 
     /**
@@ -88,7 +93,7 @@ class DashboardController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Price::findOrFail($id)->destroy($id);
+        return redirect()->route('price.index')->with('status', 'Deleted Successfully.');
     }
-    
 }

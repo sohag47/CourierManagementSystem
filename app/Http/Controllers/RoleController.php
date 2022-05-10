@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
-class DashboardController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $viewPath = 'dashboard.';
-
-    
-    public function dashboard()
-    {
-        return view($this->viewPath.'dashboard');
-    }
+    protected $viewPath = 'dashboard.settings.role.';
 
     public function index()
     {
-        //
+        $roles = Role::all()->toArray();
+        return view($this->viewPath.'index', compact('roles'));
     }
 
     /**
@@ -32,7 +27,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->viewPath.'add');
     }
 
     /**
@@ -43,7 +38,12 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|unique:role,title',
+            'status' => 'required',
+        ]);
+        Role::create($validatedData);
+        return redirect()->route('role.index')->with('status', 'Saved Successfully');
     }
 
     /**
@@ -65,7 +65,8 @@ class DashboardController extends Controller
      */
     public function edit($id)
     {
-        //
+        $role = Role::find($id)->toArray();
+        return view($this->viewPath.'edit', compact('role'));
     }
 
     /**
@@ -77,7 +78,12 @@ class DashboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|unique:role,title',
+            'status' => 'required',
+        ]);
+        Role::where('id', '=', $id)->update($validatedData);
+        return redirect()->route('role.index')->with('status', 'Updated Successfully');
     }
 
     /**
@@ -88,7 +94,7 @@ class DashboardController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Role::findOrFail($id)->destroy($id);
+        return redirect()->back()->with('status', 'Deleted Successfully.');
     }
-    
 }

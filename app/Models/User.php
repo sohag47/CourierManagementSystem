@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Role;
+use App\Models\Branch;
 
 class User extends Authenticatable
 {
@@ -41,4 +43,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function roles()
+    {
+        return $this->belongsTo(Role::class, 'user_role');
+    }
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }

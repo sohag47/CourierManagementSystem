@@ -2,27 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Address;
 
-class DashboardController extends Controller
+
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $viewPath = 'dashboard.';
 
-    
-    public function dashboard()
-    {
-        return view($this->viewPath.'dashboard');
-    }
-
+    protected $viewPath = 'dashboard.settings.address.';
     public function index()
     {
-        //
+        $addresses = Address::get()->toArray();
+        return view($this->viewPath.'index', compact('addresses'));
     }
 
     /**
@@ -32,7 +28,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->viewPath.'add');
     }
 
     /**
@@ -43,7 +39,11 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'address' => 'required|unique:address,address',
+        ]);
+        Address::create($validatedData);
+        return redirect()->route('address.index')->with('status', 'Saved Successfully');
     }
 
     /**
@@ -65,7 +65,8 @@ class DashboardController extends Controller
      */
     public function edit($id)
     {
-        //
+        $address = Address::find($id)->toArray();
+        return view($this->viewPath.'edit', compact('address'));
     }
 
     /**
@@ -77,7 +78,11 @@ class DashboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'address' => 'required|unique:address,address',
+        ]);
+        Address::where('id', '=', $id)->update($validatedData);
+        return redirect()->route('address.index')->with('status', 'Updated Successfully');
     }
 
     /**
@@ -88,7 +93,7 @@ class DashboardController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Address::findOrFail($id)->destroy($id);
+        return redirect()->route('address.index')->with('status', 'Deleted Successfully.');
     }
-    
 }

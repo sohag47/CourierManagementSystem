@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Auth;
 */
 //! import controller 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CourierController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\PriceController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,10 +36,21 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //! Dashboard Routes:
 Route::prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-      
+    Route::get('profile/{id}', [UserController::class, 'userProfile'])->name('user_profile');
+    Route::get('user-permission/{id}', [UserController::class, 'user_permission'])->name('user_permission');
+    Route::post('user-permission-save/{id}', [UserController::class, 'user_permission_save'])->name('user_permission_save');
+    Route::get('branch-setup', [BranchController::class, 'branchSetup'])->name('branch_setup');
+    Route::get('branch-user-setup/{id}', [UserController::class, 'branchUserSetup'])->name('branch_user_setup');
+    Route::post('branch-user-setup-save/{id}', [UserController::class, 'branchUserSetupSave'])->name('branch_user_setup_save');
+
     //? Resource Routes:
-    // Route::resources([
-    //     'menu' => MenuController::class,
-    //     'menu-privilege' => MenuPrivilegeController::class
-    // ]);
+    Route::resources([
+        'role' => RoleController::class,
+        'user' => UserController::class,
+        'user-role' => UserRoleController::class,
+        'branch' => BranchController::class,
+        'courier' => CourierController::class,
+        'address' => AddressController::class,
+        'price' => PriceController::class
+    ]);
 });
