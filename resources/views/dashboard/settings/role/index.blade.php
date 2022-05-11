@@ -40,7 +40,7 @@ Roles
                                 <tr>
                                     <th>#</th>
                                     <th>Role</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                     <th>Last Update</th>
                                     <th>Edit</th>
                                     <th>Delete</th>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -14,9 +15,15 @@ class DashboardController extends Controller
      */
     protected $viewPath = 'dashboard.';
 
-    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function dashboard()
     {
+        // dd(Auth::user());
+        // $user_info = User::with('roles')->where('id', '=', Auth::user()->id)->get()->toArray();
+        // dd($user_info[0]['roles']['title']);
         return view($this->viewPath.'dashboard');
     }
 

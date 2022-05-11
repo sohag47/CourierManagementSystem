@@ -81,7 +81,12 @@ Users
                                         @endif
                                     </td>
                                     <td>
+                                        @if (!empty($item['roles']['title']))
                                         {{ $item['roles']['title'] }}
+                                        @else
+                                        N/A
+                                        @endif
+
 
                                     <td>
                                         <a href="{{ route('user_permission', $item['id'])}}"
@@ -96,18 +101,19 @@ Users
                                     </td>
                                     <td>
                                         @if ($item['roles']['title'] == "Super Admin")
-                                        <button class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Not Avilable">
+                                        <button class="btn btn-outline-danger" data-toggle="tooltip"
+                                            data-placement="top" title="Not Avilable">
                                             <i class="fa fa-user-times" aria-hidden="true"></i>
                                         </button>
-                                        
+
                                         @else
-                                            <form action="{{ route('role.destroy', $item['id']) }}" method="post">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button class="btn btn-outline-danger">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                </button>
-                                            </form>
+                                        <form action="{{ route('role.destroy', $item['id']) }}" method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn btn-outline-danger">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
                                         @endif
 
 

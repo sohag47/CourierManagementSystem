@@ -79,7 +79,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'title' => 'required|unique:role,title',
+            'title' => 'required',
             'status' => 'required',
         ]);
         Role::where('id', '=', $id)->update($validatedData);

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title> @yield('title') - {{ config('app.name') }}</title>
+    <title> @yield('title') - ARK Currier Service</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('dashboard/images/favicon.png') }}">
     <!-- Pignose Calender -->
@@ -21,9 +21,9 @@
 </head>
 
 <body>
-    {{-- @php
-    $menus = \App\Models\Settings\Menu::get();
-    @endphp --}}
+    @php
+    $auth_user_info = \App\Models\User::with('roles')->where('id', '=', Auth::user()->id)->get()->toArray();
+    @endphp
     <!--*******************
         Preloader start
     ********************-->
@@ -49,13 +49,14 @@
         ***********************************-->
         <div class="nav-header">
             <div class="brand-logo">
-                <a href="index.html">
-                    <b class="logo-abbr"><img src="{{ asset('dashboard/images/logo.png') }}" alt=""> </b>
+                <a href="{{ url('/') }}">
+                    <h4>ARK Currier Service</h4>
+                    {{-- <b class="logo-abbr"><img src="{{ asset('dashboard/images/logo.png') }}" alt=""> </b>
                     <span class="logo-compact"><img src="{{ asset('dashboard/images/logo-compact.png') }}"
                             alt=""></span>
                     <span class="brand-title">
                         <img src="{{ asset('dashboard/images/logo-text.png') }}" alt="">
-                    </span>
+                    </span> --}}
                 </a>
             </div>
         </div>
@@ -91,7 +92,7 @@
                 </div> --}}
                 <div class="header-right">
                     <ul class="clearfix">
-                        <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                        {{-- <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
                                 <i class="mdi mdi-email-outline"></i>
                                 <span class="badge badge-pill gradient-1">3</span>
                             </a>
@@ -212,7 +213,7 @@
 
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         {{-- <li class="icons dropdown d-none d-md-flex">
                             <a href="javascript:void(0)" class="log-user" data-toggle="dropdown">
                                 <span>English</span> <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
@@ -307,6 +308,8 @@
                             </span>
                         </a>
                     </li>
+                    @if ($auth_user_info[0]['roles']['title'] == "Super Admin")
+                    <!--Settings-->
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="fa fa-cog" aria-hidden="true"></i>
@@ -340,6 +343,10 @@
                             </li>
                         </ul>
                     </li>
+                    @endif
+                    @if ($auth_user_info[0]['roles']['title'] == "Super Admin" || $auth_user_info[0]['roles']['title']
+                    == "Staff")
+                    <!--Manage Branch-->
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="fa fa-industry" aria-hidden="true"></i>
@@ -362,6 +369,10 @@
                             </li>
                         </ul>
                     </li>
+                    @endif
+                    @if ($auth_user_info[0]['roles']['title'] == "Super Admin" || $auth_user_info[0]['roles']['title']
+                    == "Staff")
+                    <!--Manage Shipment-->
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="fa fa-truck" aria-hidden="true"></i>
@@ -383,6 +394,7 @@
                             </li> --}}
                         </ul>
                     </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -394,6 +406,7 @@
             Content body start
         ***********************************-->
         <div class="content-body">
+
             @include('dashboard_messages')
             @yield('breadcrumb')
             @yield('content')
@@ -411,7 +424,7 @@
             <div class="copyright">
                 <p>Copyright &copy; {{ date("Y") }}
                     <a href="{{ url('/')}}">
-                        Courier Management System
+                        ARK Currier Service
                     </a>
                     All rights reserved.
                     {{-- Designed & Developed by

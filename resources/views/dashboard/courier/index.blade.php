@@ -24,7 +24,7 @@ Shipment
                     <div class="card-title">
                         <div class="row">
                             <div class="col-6">
-                                <h4>Shipment</h4>
+                                <h4>Shipment dsdds</h4>
                             </div>
                             <div class="col-6 text-right">
                                 <a href="{{ route('courier.create')}}" class="btn btn-outline-primary ">
