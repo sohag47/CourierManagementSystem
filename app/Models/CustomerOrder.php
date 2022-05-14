@@ -30,11 +30,11 @@ class CustomerOrder extends Model
     }
     public function sender_deliveryman()
     {
-        return $this->belongsTo(Branch::class, 'sender_deliveryman_id');
+        return $this->belongsTo(User::class, 'sender_deliveryman_id');
     }
     public function recipient_deliveryman()
     {
-        return $this->belongsTo(Branch::class, 'recipient_deliveryman_id');
+        return $this->belongsTo(User::class, 'recipient_deliveryman_id');
     }
     
 }

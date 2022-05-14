@@ -371,7 +371,8 @@
                     </li>
                     @endif
                     @if ($auth_user_info[0]['roles']['title'] == "Super Admin" || $auth_user_info[0]['roles']['title']
-                    == "Staff")
+                    == "Staff" || $auth_user_info[0]['roles']['title']
+                    == "Delivery Man")
                     <!--Manage Shipment-->
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
@@ -380,18 +381,68 @@
                             </span>
                         </a>
                         <ul aria-expanded="false">
+                            @if ($auth_user_info[0]['roles']['title'] == "Super Admin" ||
+                            $auth_user_info[0]['roles']['title']
+                            == "Staff")
                             <li>
                                 <a href="{{ route('courier.index') }}">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                    Shipment
+                                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    Pending Order
                                 </a>
                             </li>
-                            {{-- <li>
-                                <a href="{{ route('role.index')}}">
-                                    <i class="fa fa-key" aria-hidden="true"></i>
-                                    Role
+                            @endif
+                            {{-- @if ($auth_user_info[0]['roles']['title'] == "Super Admin" ||
+                            $auth_user_info[0]['roles']['title']
+                            == "Staff") --}}
+                            <li>
+                                <a href="{{ route('order-received') }}">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                    Recieved Order
                                 </a>
-                            </li> --}}
+                            </li>
+                            {{-- @endif
+                            @if ($auth_user_info[0]['roles']['title'] == "Super Admin" ||
+                            $auth_user_info[0]['roles']['title']
+                            == "Delivery Man") --}}
+                            <li>
+                                <a href="{{ route('order-transfer-list') }}">
+                                    <i class="fa fa-truck " aria-hidden="true"></i>
+                                    Transfer Order
+                                </a>
+                            </li>
+                            {{-- @endif
+                            @if ($auth_user_info[0]['roles']['title'] == "Super Admin" ||
+                            $auth_user_info[0]['roles']['title']
+                            == "Staff") --}}
+                            <li>
+                                <a href="{{ route('order-delivery-list') }}">
+                                    <i class="fa fa-cubes" aria-hidden="true"></i>
+                                    Delivery Order
+                                </a>
+                            </li>
+                            {{-- @endif
+                            @if ($auth_user_info[0]['roles']['title'] == "Super Admin" ||
+                            $auth_user_info[0]['roles']['title']
+                            == "Delivery Man") --}}
+                            <li>
+                                <a href="{{ route('order-complete') }}">
+                                    <i class="fa fa-suitcase" aria-hidden="true"></i>
+                                    Order Distributes
+                                </a>
+                            </li>
+                            <li>
+                                {{-- @endif
+                                @if ($auth_user_info[0]['roles']['title'] == "Super Admin" ||
+                                $auth_user_info[0]['roles']['title']
+                                == "Staff" || $auth_user_info[0]['roles']['title']
+                                == "Delivery Man") --}}
+                            <li>
+                                <a href="{{ route('order-history')}}">
+                                    <i class="fa fa-history" aria-hidden="true"></i>
+                                    Order History
+                                </a>
+                            </li>
+                            {{-- @endif --}}
                         </ul>
                     </li>
                     @endif

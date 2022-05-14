@@ -13,6 +13,10 @@ class PriceController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $viewPath = 'dashboard.settings.price.';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $prices = Price::get()->toArray();

@@ -15,6 +15,10 @@ class AddressController extends Controller
      */
 
     protected $viewPath = 'dashboard.settings.address.';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $addresses = Address::get()->toArray();

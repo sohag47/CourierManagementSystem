@@ -7,9 +7,11 @@ use App\Models\Customer;
 use App\Models\Branch;
 use App\Models\Price;
 use App\Models\CustomerOrder;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Helper;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CourierController extends Controller
 {
@@ -20,11 +22,14 @@ class CourierController extends Controller
      */
     private $customerId;
     protected $viewPath = 'dashboard.courier.';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
-        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->get()->toArray();
-        // dd($customer_order_infos);
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('order_received', '=', null)->get()->toArray();
         return view($this->viewPath.'index', compact('customer_order_infos'));
     }
 
@@ -162,7 +167,107 @@ class CourierController extends Controller
      */
     public function destroy($id)
     {
-        // Branch::findOrFail($id)->destroy($id);
-        // return redirect()->route('branch.index')->with('status', 'Deleted Successfully.');
+        CustomerOrder::findOrFail($id)->destroy($id);
+        return redirect()->route('courier.index')->with('status', 'Deleted Successfully.');
+    }
+    public function orderReceived($id)
+    {
+        $order = [
+            'order_received' => Carbon::now()->format('Y-m-d H:i:s')
+        ];
+        CustomerOrder::where('id', '=', $id)->update($order);
+        return redirect()->route('courier.index')->with('status', 'Order Received Successfully');
+    }
+    public function ReceivedOrderList()
+    {
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('order_received', '!=', null)->get()->toArray();
+        return view($this->viewPath.'order_received', compact('customer_order_infos'));
+    }
+    public function OrderTransfer($id)
+    {
+        $delivery_man = "Delivery Man";
+        $delivery_mans = DB::select("select usr.* , r.title, b.id as branchId, b.name as branch_name
+            from users as usr 
+            join role as r on r.id = usr.user_role
+            join branch as b on b.id = usr.branch_id
+            where r.title like '%$delivery_man%' and usr.deleted_at is null"
+        );
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('id', '=', $id)->get()->toArray();
+        return view($this->viewPath.'order_transfer', compact('customer_order_infos', 'delivery_mans'));
+    }
+    public function OrderTransferSave(Request $request, $id)
+    {
+        $order = [
+            'sender_deliveryman_id' => $request->sender_deliveryman_id
+        ];
+        CustomerOrder::where('id', '=', $id)->update($order);
+        return redirect()->back()->with('status', 'Order Transfer Successfully');
+    }
+    public function OrderTransferList()
+    {
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')
+        ->where('sender_deliveryman_id', '!=', null)
+        // ->where('sender_deliveryman_id', '=', Auth::user()->id)
+        ->where('arrived_destination', '=', null)->get()->toArray();
+        // dd($customer_order_infos);
+        return view($this->viewPath.'order_transfer_list', compact('customer_order_infos'));
+    }
+    public function orderArrivedDestination($id)
+    {
+        $order = [
+            'arrived_destination' => Carbon::now()->format('Y-m-d H:i:s')
+        ];
+        CustomerOrder::where('id', '=', $id)->update($order);
+        return redirect()->back()->with('status', 'Order Delivered Successfully');
+    }
+    public function OrderdeliveryList()
+    {
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')
+        ->where('recipient_deliveryman_id', '=', null)
+        // ->where('recipient_branch_id', '=', Auth::user()->branch_id)
+        ->where('arrived_destination', '!=', null)
+        ->get()->toArray();
+        return view($this->viewPath.'order_delivery_list', compact('customer_order_infos'));
+    }
+    public function Orderdelivered($id)
+    {
+        $delivery_man = "Delivery Man";
+        $delivery_mans = DB::select("select usr.* , r.title, b.id as branchId, b.name as branch_name
+            from users as usr 
+            join role as r on r.id = usr.user_role
+            join branch as b on b.id = usr.branch_id
+            where r.title like '%$delivery_man%' and usr.deleted_at is null"
+        );
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('id', '=', $id)->get()->toArray();
+        return view($this->viewPath.'order_delivered', compact('customer_order_infos', 'delivery_mans'));
+    }
+    public function OrderDeliveredSave(Request $request, $id)
+    {
+        $order = [
+            'recipient_deliveryman_id' => $request->recipient_deliveryman_id
+        ];
+        CustomerOrder::where('id', '=', $id)->update($order);
+        return redirect()->back()->with('status', 'Order Transfer Successfully');
+    }
+    public function OrderComplete()
+    {
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('recipient_deliveryman_id', '!=', null)
+        // ->where('recipient_deliveryman_id', '=', Auth::user()->id)
+        ->where('delivered', '=', null)->get()->toArray();
+        return view($this->viewPath.'order_complete_list', compact('customer_order_infos'));
+    }
+    public function OrderCompleteSave(Request $request, $id)
+    {
+        $order = [
+            'status' => 1,
+            'delivered' =>  Carbon::now()->format('Y-m-d H:i:s')
+        ];
+        CustomerOrder::where('id', '=', $id)->update($order);
+        return redirect()->back()->with('status', 'Order Transfer Successfully');
+    }
+    public function OrderHistory()
+    {
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->get()->toArray();
+        return view($this->viewPath.'order_complete_history', compact('customer_order_infos'));
     }
 }

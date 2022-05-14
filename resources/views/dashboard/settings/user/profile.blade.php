@@ -45,6 +45,11 @@ My Profile
                         <li>
                             <strong class="text-dark mr-1">Address</strong> <span>{{ $user['address']}}</span>
                         </li>
+                        <li>
+                            <a href="{{ route('user.edit', $user['id'])}}" class="btn btn-outline-info">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 @extends('dashboard_layout')
 
 @section('title')
-Add New Role
+Add New User
 @endsection
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@ Add New Role
     <div class="col p-md-0">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Add New Role</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Add New User</a></li>
         </ol>
     </div>
 </div>
@@ -25,53 +25,90 @@ Add New Role
                     <div class="card-title">
                         <div class="row">
                             <div class="col-6">
-                                <h4>Add New Role</h4>
+                                <h4>Add New User</h4>
                             </div>
                             <div class="col-6 text-right">
-                                <a href="{{ route('role.index')}}" class="btn btn-outline-primary ">
+                                <a href="{{ route('user.index')}}" class="btn btn-outline-primary ">
                                     <i class="fa fa-list" aria-hidden="true"></i>
-                                    Role List
+                                    User List
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="form-validation">
-                        <form class="form-valide" action="{{ route('role.store')}}" method="post">
+                        <form class="form-valide" action="{{ route('user.store')}}" method="post">
                             @csrf
                             <div class="row">
 
-                                <div class="col-8">
+                                <div class="col-6">
                                     <div class="form-group">
-                                        <label class="col-form-label" for="title">
-                                            Title <span class="text-danger">*</span>
+                                        <label class="col-form-label" for="name">
+                                            Name <span class="text-danger">*</span>
                                         </label>
                                         <div class="">
-                                            <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                                id="title" name="title" placeholder="Enter a Menu" required
-                                                value="{{ old('title') }}">
-                                            @error('title')
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                                id="name" name="name" placeholder="Enter a User Name" required
+                                                value="{{ old('name') }}">
+                                            @error('name')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror
 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-6">
                                     <div class="form-group">
-                                        <label class="col-form-label" for="status">
-                                            Status <span class="text-danger">*</span>
+                                        <label class="col-form-label" for="email">
+                                            Email <span class="text-danger">*</span>
                                         </label>
-                                        <select class="form-control @error('status') is-invalid @enderror" id="status"
-                                            name="status">
-                                            <option value="">Please select</option>
-                                            <option value="0">Draft</option>
-                                            <option value="1" selected>Published</option>
-                                        </select>
-                                        @error('status')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
+                                        <div class="">
+                                            <input type="email"
+                                                class="form-control @error('email') is-invalid @enderror" id="email"
+                                                name="email" placeholder="Enter a Email" required
+                                                value="{{ old('email') }}">
+                                            @error('email')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="password">
+                                            Pasword <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="">
+                                            <input type="password"
+                                                class="form-control @error('password') is-invalid @enderror"
+                                                id="password" name="password" placeholder="Enter a Pasword" required
+                                                value="{{ old('password') }}">
+                                            @error('password')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="confirm_password">
+                                            Confirm Pasword <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="">
+                                            <input type="password"
+                                                class="form-control @error('confirm_password') is-invalid @enderror"
+                                                id="confirm_password" name="confirm_password"
+                                                placeholder="Enter a Confirm Pasword" required
+                                                value="{{ old('confirm_password') }}">
+                                            @error('confirm_password')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+
+                                        </div>
+                                    </div>
+                                </div>
+
 
 
                             </div>

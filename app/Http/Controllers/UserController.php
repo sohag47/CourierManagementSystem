@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\UserRole;
 use App\Models\Branch;
-
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
@@ -16,6 +16,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $viewPath = 'dashboard.settings.user.';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         // $users = User::all()->toArray();
@@ -30,7 +34,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->viewPath.'add');
     }
 
     /**
@@ -41,7 +45,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $validatedData = $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|unique:users,email',
+        //     'pasword' => 'required',
+        //     'confirm_pasword' => 'required'
+        // ]);
+        if ($request->password == $request->confirm_password) {
+            User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+        return redirect()->back()->with('status', 'Create User Successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Create User Unsuccessful. Password does not match.');
+        }
     }
 
     /**

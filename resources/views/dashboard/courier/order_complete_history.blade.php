@@ -1,0 +1,111 @@
+@extends('dashboard_layout')
+
+@section('title')
+Order History
+@endsection
+
+@section('breadcrumb')
+<div class="row page-titles mx-0">
+    <div class="col p-md-0">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Order History</a></li>
+        </ol>
+    </div>
+</div>
+@endsection
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Order History</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered zero-configuration">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Order ID</th>
+                                    <th>Sender Name</th>
+                                    <th>Sender Phone</th>
+                                    <th>Recipient Name</th>
+                                    <th>Recipient Phone</th>
+                                    <th>Weight</th>
+                                    <th>Price</th>
+                                    <th>From Branch</th>
+                                    <th>To Branch</th>
+                                    <th>Order Recieved</th>
+                                    <th>Order Transfered</th>
+                                    <th>Arrived Destination</th>
+                                    <th>Delivery On the way</th>
+                                    <th>Order Delevered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($customer_order_infos as $index=>$info)
+                                <tr>
+                                    <th>{{ $index + 1 }}</th>
+                                    <td>{{ $info['order_id'] }}</td>
+                                    <td>{{ $info['customers']['sender_name'] }}</td>
+                                    <td>{{ $info['customers']['sender_phone']}}</td>
+                                    <td>{{ $info['customers']['recipient_name']}}</td>
+                                    <td>{{ $info['customers']['recipient_phone'] }}</td>
+                                    <td>{{ $info['customers']['weight']}} kg</td>
+                                    <td>{{ $info['customers']['price']}} taka</td>
+                                    <td>
+                                        {{ $info['sender_branches']['name'] }}</td>
+                                    <td>{{ $info['recipient_branch']['name']}}</td>
+                                    <td>
+                                        @if (!empty($info['order_received']))
+                                        <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+                                        @else
+                                        <i class="fa fa-exclamation-circle text-danger fa-lg" aria-hidden="true"></i>
+                                        @endif
+                                    </td>
+                                    <td class="text-success">
+                                        @if (!empty($info['sender_deliveryman_id']))
+                                        <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+                                        @else
+                                        <i class="fa fa-exclamation-circle text-danger fa-lg" aria-hidden="true"></i>
+                                        @endif
+                                    </td>
+                                    <td class="text-success">
+                                        @if (!empty($info['arrived_destination']))
+                                        <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+                                        @else
+                                        <i class="fa fa-exclamation-circle text-danger fa-lg" aria-hidden="true"></i>
+                                        @endif
+                                    </td>
+                                    <td class="text-success">
+                                        @if (!empty($info['recipient_deliveryman_id']))
+                                        <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+                                        @else
+                                        <i class="fa fa-exclamation-circle text-danger fa-lg" aria-hidden="true"></i>
+                                        @endif
+                                    </td>
+                                    <td class="text-success">
+                                        @if (!empty($info['status']))
+                                        <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+                                        @else
+                                        <i class="fa fa-exclamation-circle text-danger fa-lg" aria-hidden="true"></i>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

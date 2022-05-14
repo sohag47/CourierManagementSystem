@@ -26,12 +26,12 @@ Users
                             <div class="col-6">
                                 <h4>Users</h4>
                             </div>
-                            {{-- <div class="col-6 text-right">
-                                <a href="{{ route('role.create')}}" class="btn btn-outline-primary ">
+                            <div class="col-6 text-right">
+                                <a href="{{ route('user.create')}}" class="btn btn-outline-primary ">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
-                                    Add new Role
+                                    Add new User
                                 </a>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -46,7 +46,7 @@ Users
                                     <th>Address</th>
                                     <th>Status</th>
                                     <th>Permission</th>
-                                    <th>Edit</th>
+                                    {{-- <th>Edit</th> --}}
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -94,11 +94,11 @@ Users
                                             <i class="fa fa-toggle-on" aria-hidden="true"></i>
                                         </a>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <a href="{{ route('user.edit', $item['id'])}}" class="btn btn-outline-info">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </a>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @if ($item['roles']['title'] == "Super Admin")
                                         <button class="btn btn-outline-danger" data-toggle="tooltip"
@@ -107,7 +107,7 @@ Users
                                         </button>
 
                                         @else
-                                        <form action="{{ route('role.destroy', $item['id']) }}" method="post">
+                                        <form action="{{ route('user.destroy', $item['id']) }}" method="post">
                                             @method('DELETE')
                                             @csrf
                                             <button class="btn btn-outline-danger">

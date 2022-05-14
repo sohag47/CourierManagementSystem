@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Branch;
+use App\Models\Address;
+use App\Models\CustomerOrder;
 class HomeController extends Controller
 {
     /**
@@ -11,11 +13,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -23,6 +20,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $addresses = Address::get();
+        $branches = Branch::with('addresses')->get();
+        return view('home', compact('branches', 'addresses'));
+    }
+    public function searchOrder(Request $request)
+    {
+        $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('order_id', '=', $request->order_id)->get()->toArray();
+        // dd($customer_order_infos);
+        return view('search_order', compact('customer_order_infos'));
     }
 }
