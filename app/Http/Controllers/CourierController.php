@@ -207,7 +207,7 @@ class CourierController extends Controller
     {
         $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')
         ->where('sender_deliveryman_id', '!=', null)
-        ->where('sender_deliveryman_id', '=', Auth::user()->id)
+        // ->where('sender_deliveryman_id', '=', Auth::user()->id)
         ->where('arrived_destination', '=', null)->get()->toArray();
         // dd($customer_order_infos);
         return view($this->viewPath.'order_transfer_list', compact('customer_order_infos'));
@@ -224,7 +224,7 @@ class CourierController extends Controller
     {
         $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')
         ->where('recipient_deliveryman_id', '=', null)
-        ->where('recipient_branch_id', '=', Auth::user()->branch_id)
+        // ->where('recipient_branch_id', '=', Auth::user()->branch_id)
         ->where('arrived_destination', '!=', null)
         ->get()->toArray();
         return view($this->viewPath.'order_delivery_list', compact('customer_order_infos'));
@@ -252,7 +252,7 @@ class CourierController extends Controller
     public function OrderComplete()
     {
         $customer_order_infos = CustomerOrder::with('customers', 'senderBranches', 'recipientBranch', 'sender_deliveryman', 'recipient_deliveryman')->where('recipient_deliveryman_id', '!=', null)
-        ->where('recipient_deliveryman_id', '=', Auth::user()->id)
+        // ->where('recipient_deliveryman_id', '=', Auth::user()->id)
         ->where('delivered', '=', null)->get()->toArray();
         return view($this->viewPath.'order_complete_list', compact('customer_order_infos'));
     }
